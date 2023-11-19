@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://amarjeet-saini.github.io/al-folio/sitemap.xml
+Sitemap: https://amarjeet-saini.github.io/sitemap.xml
