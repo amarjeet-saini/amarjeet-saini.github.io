@@ -1,0 +1,67 @@
+<h3 id="about-assembler">About Assembler</h3>
+<p>Assembler is a program that acts as a simple language translator (convert assembly language to machine language)</p>
+<p><img src="/static/assembly.png" alt="assembler" height="200" width="300"/></p>
+<p><a href="https://github.com/amarjeet-saini/Hack-Assembler">Project Link</a></p>
+<h3 id="hack-assembler">Hack Assembler</h3>
+<p>program that translates programs written in the symbolic Hack assembly language into binary code.</br>
+input file: xyz.asm <br /> 
+output file: xyz.hack <br /> </p>
+<p>Hack assembly language consist of two types of instruction <br /></p>
+<ul>
+<li><p><strong>A-instruction: @value</strong> <br />
+  A-instruction (addressing instruction) assigns value of const to register A i.e A &lt;- const <br /> 
+  ROM[A] register is selected (ROM : Read only memory act as instruction memory)  </p>
+</li>
+<li><p><strong>C-instruction: dest=comp;jump</strong><br /> 
+C-instruction (compute instruction) does basic computation assign valuse to destination. <br /></p>
+<pre><code>D = M+<span class="hljs-number">1</span> <span class="hljs-comment">// where D and M are register</span>
+</code></pre><p>We can also perform branching based on value comp and opcode jump</p>
+<pre><code>D;JGT <span class="hljs-comment">// if D &gt; 0 jump to ROM[A]</span>
+</code></pre></li>
+</ul>
+<h3 id="how-to-build-hack-assembler">How to build Hack Assembler</h3>
+<p>Hack assembler can be build using the idea of <strong>2 pass assembler</strong>. <br />
+<strong> pre-processing</strong> :- handle all white space and ignore comments <br />
+<strong> 1-pass </strong> :- iterate over all instructions and build up symbol table <br />
+<strong> 2-pass </strong> :- using symbol table and instruction translate into binary code. <br /></p>
+<h6 id="general-approach">General approach</h6>
+<ol>
+<li>Preprocess by parse each line of .hack code ignoring white space (i.e. empty line, comments, identation)  <br /> 
+can be done using file handling and processing in Python. <h5 id="-hack-code-input-">.hack code (input)</h5>
+<pre><code><span class="hljs-comment">// Computes R1=1 + ... + R0</span>
+<span class="hljs-comment">// i = 1</span>
+     @<span class="hljs-selector-tag">i</span>
+     M=<span class="hljs-number">1</span>
+...
+</code></pre><h5 id="symbolic-code-output-">symbolic code (output)</h5>
+<pre><code>@<span class="hljs-selector-tag">i</span>
+M=<span class="hljs-number">1</span>
+...
+</code></pre></li>
+<li><p>Create a symbol table and add all 23 pre-defined hack symbols.</p>
+<h5 id="first-pass">First pass</h5>
+</li>
+<li><p>If the instruction contain a symbol (i.e could be pre-defined, label or variable) add it to symbol table if only variable .
+eg) </p>
+<pre><code>|<span class="hljs-string"> symbol </span>|<span class="hljs-string"> value </span>|
+|<span class="hljs-string"> -------</span>|<span class="hljs-string"> ------</span>|
+ ....
+|<span class="hljs-string"> LOOP   </span>|<span class="hljs-string">   4   </span>|
+|<span class="hljs-string"> STOP   </span>|<span class="hljs-string">   18  </span>|
+|<span class="hljs-string">   i    </span>|<span class="hljs-string">   16  </span>|
+</code></pre><h5 id="second-pass">Second pass</h5>
+<p>start from begining </p>
+</li>
+<li>Translate each instruction (if w/o any symbol) directly . Need to figure out what type of instruction it is A-type or C-type can be done by just checking 
+whether inst. start with @ or not.</li>
+<li>Then if A-TYPE: <pre><code> @<span class="hljs-number">16</span>            =&gt;  <span class="hljs-number">0000000000010000</span>
+</code></pre>and if C-type (find what is destn,comp and jump of inst. and decode acc.) <pre><code><span class="hljs-attr">M</span>=<span class="hljs-number">1</span>             =&gt;  <span class="hljs-number">1110111111001000</span>
+</code></pre></li>
+<li>If the instruction contains symbols use the symbol table to parse it.</li>
+<li>Keep writing output to the new file as we go through each instruction.
+##### </li>
+</ol>
+<h3 id="resources">Resources</h3>
+<p><a href="https://www.nand2tetris.org/project06">Nand2Tetris</a> <br />
+<a href="https://drive.google.com/file/d/1uKGRMnL-gqk9DsgeN50z0EpHoSMWe6F5/view">Hack assembler guide</a> <br />
+<a href="https://en.wikipedia.org/wiki/Assembly_language#Assembler">Wiki</a></p>
